@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       }
 
       var configFiles = f.orig.src,
-        concat, fileExists, onEachFile;
+        fileExists, concat;
 
       fileExists = function(filepath) {
         if (!grunt.file.exists(filepath)) {
@@ -42,32 +42,23 @@ module.exports = function(grunt) {
           return;
         }
 
-        var _read, _join;
-
-        _read = function(filepath) {
-          return grunt.file.read(filepath)
-        };
-        _join = grunt.util.normalizelf(options.separator);
-
         return fileArray
           .filter(fileExists)
-          .map(_read)
-          .join(_join);
-      };
-
-      onEachFile = function(filepath) {
-        var config = JSON.parse(grunt.file.read(filepath));
-
-        Object.keys(config).forEach(function(key) {
-          var dest = f.dest + key;
-          grunt.file.write(dest, concat(config[key]));
-          grunt.log.writeln('File "' + dest + '" created.');
-        });
+          .map(grunt.file.read)
+          .join(grunt.util.normalizelf(options.separator));
       };
 
       configFiles
         .filter(fileExists)
-        .map(onEachFile);
+        .map(function(filepath) {
+          var config = JSON.parse(grunt.file.read(filepath));
+
+          Object.keys(config).forEach(function(key) {
+            var dest = f.dest + key;
+            grunt.file.write(dest, concat(config[key]));
+            grunt.log.writeln('File "' + dest + '" created.');
+          });
+        });
     });
   });
 
