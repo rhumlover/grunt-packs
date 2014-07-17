@@ -59,8 +59,9 @@ module.exports = function(grunt) {
         var config = JSON.parse(grunt.file.read(filepath));
 
         Object.keys(config).forEach(function(key) {
-          grunt.file.write((f.dest + key), concat(config[key]));
-          grunt.log.writeln('File "' + key + '" created.');
+          var dest = f.dest + key;
+          grunt.file.write(dest, concat(config[key]));
+          grunt.log.writeln('File "' + dest + '" created.');
         });
       };
 
