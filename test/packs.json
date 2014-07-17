@@ -1,5 +1,5 @@
 {
-    "tmp/all": [
+    "all": [
         "test/fixtures/1",
         "test/fixtures/2"
     ]

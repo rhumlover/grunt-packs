@@ -17,6 +17,13 @@ module.exports = function(grunt) {
     });
 
     this.files.forEach(function(f) {
+      if (!f.dest) {
+        f.dest = './';
+      }
+      else if (!/\/$/.test(f.dest)) {
+        f.dest += '/';
+      }
+
       var configFiles = f.orig.src,
         concat, fileExists, onEachFile;
 
@@ -51,9 +58,9 @@ module.exports = function(grunt) {
       onEachFile = function(filepath) {
         var config = JSON.parse(grunt.file.read(filepath));
 
-        Object.keys(config).forEach(function(dest) {
-          grunt.file.write(dest, concat(config[dest]));
-          grunt.log.writeln('File "' + dest + '" created.');
+        Object.keys(config).forEach(function(key) {
+          grunt.file.write((f.dest + key), concat(config[key]));
+          grunt.log.writeln('File "' + key + '" created.');
         });
       };
 

@@ -30,7 +30,7 @@ exports.packs = {
   default_options: function(test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/all');
+    var actual = grunt.file.read('tmp/expected/all');
     var expected = grunt.file.read('test/expected/all');
     test.equal(actual, expected, 'should describe what the default behavior is.');
 
