@@ -8,6 +8,9 @@
 
 'use strict';
 
+var fs = require('fs'),
+  filesize = require('filesize');
+
 module.exports = function(grunt) {
 
   grunt.registerMultiTask('packs', 'An easy way to pack files from JSON config', function() {
@@ -51,12 +54,16 @@ module.exports = function(grunt) {
       configFiles
         .filter(fileExists)
         .map(function(filepath) {
-          var config = JSON.parse(grunt.file.read(filepath));
+          var config = grunt.file.readJSON(filepath);
 
           Object.keys(config).forEach(function(key) {
-            var dest = f.dest + key;
+            var dest = f.dest + key,
+              destSize;
+
             grunt.file.write(dest, concat(config[key]));
-            grunt.log.writeln('File "' + dest + '" created.');
+
+            destSize = filesize(fs.statSync(dest)['size']);
+            grunt.log.writeln('File "' + dest + '" created (' + destSize + ')');
           });
         });
     });
